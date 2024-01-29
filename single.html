@@ -1,0 +1,186 @@
+<!-- converted at 01-28-24 -->
+<body>
+  <div id="clock">
+    <div id="visits"></div>
+    <div id="year"></div>
+    <div id="season"></div>
+    <div id="month"></div>
+    <div id="day"></div>
+    <div id="text">
+      <span id="hour"></span>
+      <span id="minute"></span>
+      <span id="second"></span>
+    </div>
+  </div>
+  <script>
+    function daySeason(dayOfYear) {
+      if (dayOfYear >= 79 && dayOfYear < 172) {
+        return "Spring";
+      } else if (dayOfYear >= 172 && dayOfYear < 266) {
+        return "Summer";
+      } else if (dayOfYear >= 266 && dayOfYear < 355) {
+        return "Fall";
+      } else {
+        return "Winter";
+      }
+    }
+    function updateClock() {
+      const now = new Date();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+      const brightness = 1;
+
+      const lightness = Math.max(
+        90 - Math.abs(hour - 12) * (90 / 12) + 5,
+        5 + 10 * brightness
+      );
+      const saturation = Math.floor((second / 60) * 50) + 50;
+      const invertedLightness = Math.max(
+        Math.min(Math.abs(100 - lightness), 80),
+        30
+      );
+
+      const clockElement = document.getElementById("clock");
+      clockElement.style.setProperty(
+        "--background",
+        `hsl(${minute * 15}, ${saturation}%, ${lightness}%)`
+      );
+      clockElement.style.color = `hsl(${
+        (minute * 15 + 90) % 360
+      }, ${saturation}%, ${invertedLightness}%)`;
+      clockElement.style.setProperty(
+        "--shadow-color",
+        `hsl(${
+          (minute * 15 + 150) % 360
+        }, ${saturation}%, ${invertedLightness}%)`
+      );
+
+      document.getElementById("visits").textContent = BigInt(
+        now.getTime()
+      ).toString();
+      document.getElementById("year").textContent = now.getFullYear();
+      // Assuming daySeason is a function defined elsewhere to get the season
+      document.getElementById("season").textContent = daySeason(now.getDate());
+      document.getElementById("month").textContent = `${
+        now.getMonth() + 1
+      }-${now.toLocaleString("default", { month: "short" })}`;
+      document.getElementById(
+        "day"
+      ).textContent = `${now.getDate()}-${now.toLocaleString("default", {
+        weekday: "short",
+      })}`;
+
+      const hourElement = document.getElementById("hour");
+      hourElement.textContent = now.getHours() % 12 || 12;
+      hourElement.style.setProperty(
+        "--shadow-x",
+        `${Math.cos((((hour % 12) * 30 - 90) * Math.PI) / 180) * 40}px`
+      );
+      hourElement.style.setProperty(
+        "--shadow-y",
+        `${Math.sin((((hour % 12) * 30 - 90) * Math.PI) / 180) * 40}px`
+      );
+
+      const minuteElement = document.getElementById("minute");
+      minuteElement.textContent = minute.toString().padStart(2, "0");
+      minuteElement.style.setProperty(
+        "--shadow-x",
+        `${Math.cos(((minute * 6 - 90) * Math.PI) / 180) * 40}px`
+      );
+      minuteElement.style.setProperty(
+        "--shadow-y",
+        `${Math.sin(((minute * 6 - 90) * Math.PI) / 180) * 40}px`
+      );
+
+      const secondElement = document.getElementById("second");
+      secondElement.textContent = second.toString().padStart(2, "0");
+      secondElement.style.setProperty(
+        "--shadow-x",
+        `${Math.cos(((second * 6 - 90) * Math.PI) / 180) * 40}px`
+      );
+      secondElement.style.setProperty(
+        "--shadow-y",
+        `${Math.sin(((second * 6 - 90) * Math.PI) / 180) * 40}px`
+      );
+    }
+
+    setInterval(updateClock, 100);
+    updateClock();
+  </script>
+  <style>
+    #clock #season,
+    #clock #visits,
+    #clock #year {
+      position: absolute;
+      top: 0;
+    }
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+    * {
+      margin: 0;
+    }
+    body {
+      height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    #clock {
+      width: 100%;
+      height: 100%;
+      transition: background 0.5s ease-in-out;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      background: var(--background);
+    }
+    #clock #year {
+      left: 4px;
+    }
+    #clock #month {
+      position: absolute;
+      bottom: 0;
+      left: 4px;
+    }
+    #clock #day {
+      position: absolute;
+      bottom: 0;
+      right: 4px;
+    }
+    #clock #season {
+      right: 4px;
+    }
+    #clock #visits {
+      word-break: break-all;
+      font-size: 1em;
+      filter: blur(2px) hue-rotate(-45deg) contrast(160%);
+      color: var(--background);
+      z-index: 0;
+    }
+    #clock #visits:hover {
+      filter: blur(0px) hue-rotate(-45deg) contrast(160%);
+    }
+    #clock #hour,
+    #clock #minute,
+    #clock #second {
+      text-shadow: var(--shadow-x) var(--shadow-y) 6px var(--shadow-color);
+    }
+    #clock #text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5em;
+    }
+    #clock #hour {
+      margin-left: -5em;
+    }
+    #clock #second {
+      margin-left: 5em;
+    }
+  </style>
+</body>
