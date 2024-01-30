@@ -19,9 +19,9 @@ export function daySeason(dayOfYear: number) {
     return "Winter";
   }
 }
-const start = dayjs();
+// const start = dayjs();
 
-function getCurrentMoonPhase(): { emoji: string; brightness: number } {
+export function getCurrentMoonPhase(): { emoji: string; brightness: number } {
   const now = dayjs();
   const lunarMonth = 29.53058867; // average length of a lunar month in days
   const knownNewMoon = dayjs("2000-01-06"); // a known new moon date to base calculations on
@@ -64,10 +64,10 @@ function getCurrentMoonPhase(): { emoji: string; brightness: number } {
 function TimeSquare({ time }: { time: dayjs.Dayjs }) {
   // lightness scales from 5% at midnight to 100% at noon based on the hour of the day
   const hour = time.hour();
-  const { emoji, brightness } = getCurrentMoonPhase();
+  // const { emoji, brightness } = getCurrentMoonPhase();
   const lightness = Math.max(
     90 - Math.abs(hour - 12) * (90 / 12) + 5,
-    5 + 10 * brightness
+    5 + 10 // * brightness
   );
 
   // useEffect(() => {
@@ -82,6 +82,9 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
     Math.min(Math.abs(100 - lightness), 80),
     30
   );
+  const hourAngle = (time.hour() % 12) * 30;
+  const minuteAngle = time.minute() * 6;
+  const secondAngle = time.second() * 6;
 
   return (
     <div
@@ -89,6 +92,7 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
       style={{
         // different color based on hour
         background: `hsl(${time.minute() * 15}, ${saturation}%, ${lightness}%)`,
+        // @ts-expect-error css var not recognized
         "--background": `hsl(${
           time.minute() * 15
         }, ${saturation}%, ${lightness}%)`,
@@ -128,13 +132,12 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
         <span
           className="hour"
           style={{
-            // transform: `rotate(${time.hour() * 30}deg)`,
-            "--angle": `${(time.hour() % 12) * 30}deg`,
+            // @ts-expect-error css var not recognized
             "--shadow-x": `${
-              Math.cos((((time.hour() % 12) * 30 - 90) * Math.PI) / 180) * 40
+              Math.cos(((hourAngle - 90) * Math.PI) / 180) * 40
             }px`,
             "--shadow-y": `${
-              Math.sin((((time.hour() % 12) * 30 - 90) * Math.PI) / 180) * 40
+              Math.sin(((hourAngle - 90) * Math.PI) / 180) * 40
             }px`,
           }}
         >
@@ -143,13 +146,12 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
         <span
           className="minute"
           style={{
-            // transform: `rotate(${time.minute() * 6}deg)`,
-            "--angle": `${time.minute() * 6}deg`,
+            // @ts-expect-error css var not recognized
             "--shadow-x": `${
-              Math.cos(((time.minute() * 6 - 90) * Math.PI) / 180) * 40
+              Math.cos(((minuteAngle - 90) * Math.PI) / 180) * 40
             }px`,
             "--shadow-y": `${
-              Math.sin(((time.minute() * 6 - 90) * Math.PI) / 180) * 40
+              Math.sin(((minuteAngle - 90) * Math.PI) / 180) * 40
             }px`,
           }}
         >
@@ -158,13 +160,12 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
         <span
           className="second"
           style={{
-            // transform: `rotate(${time.second() * 6}deg)`,
-            "--angle": `${time.second() * 6}deg`,
+            // @ts-expect-error css var not recognized
             "--shadow-x": `${
-              Math.cos(((time.second() * 6 - 90) * Math.PI) / 180) * 40
+              Math.cos(((secondAngle - 90) * Math.PI) / 180) * 40
             }px`,
             "--shadow-y": `${
-              Math.sin(((time.second() * 6 - 90) * Math.PI) / 180) * 40
+              Math.sin(((secondAngle - 90) * Math.PI) / 180) * 40
             }px`,
           }}
         >
