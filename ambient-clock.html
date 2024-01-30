@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>ambient clock (Taper #12)</title>
+
+<!-- “ambient clock” Copyright (C) 2024 Spencer Chang
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright 
+notice and this notice are preserved. This file is offered as-is,
+without any warranty.
+
+This is from Taper #12: Tools, Spring 2024:
+
+https://taper.badquar.to/12/ambient-clock.html
+
+Even though clocks are traditionally ambient, time has become a capitalist utility in the modern world, used to dictate human movement and labor. Each minute is no different from the last in a world where time is fungible fodder for productivity. Time has become a commodity and a tool for controlling us, something that restricts our autonomy rather than enhancing our capabilities.
+
+"ambient clock" reimagines one of our most basic and fundamental tools into one that invites us to become acquainted with the natural movements of time and even each minute of the day as its own person. A record of the current time hovers in the center, while their shadows orbit around them, following the trajectory of a clock's hands. The clock's brightness mirrors the movement of the sun throughout the day, and each minute of the day progresses proportionally through the color wheel. 
+
+In addition to the standard discrete units of time, "ambient clock" gives space to continuous measures of time through the current season and an ever-increasing representation of the life of computing—the current UNIX timestamp. As time passes, this website will also age, until one day its entire surface is filled with a record of the history of its host's origin.
+
+As the name suggests, the piece is designed such that it can be experienced ambiently as a small window in the corner of your screen or set aside on a small side monitor. Rather than yielding something useful immediately upon use, "ambient clock" asks for continued presence. As a visitor spends more time with "ambient clock" and grows familiar with the form of a day's minutes, the more "useful" the clock becomes as a glance becomes enough to give a sense of the time of day.
+
+What does time become when each minute is humanized? How does a tool change us when it becomes an environment?
+
+-->
+
+<style>
+	body { margin:0 ; overflow:hidden }
+	a { color:#eee ; text-decoration:none }
+	header { margin:0 ; padding:0 ; background-color:#444 ; color:#bbb ;
+		position:relative ; z-index:1000 }
+	header > h1 { margin:0 ; font-size:12px ; font-family:sans-serif ;
+		border-bottom:1px #999 solid ; padding:5px 10px ; line-height:17px }
+</style>
+</head>
+<body>
+<header id=nav>
+	<h1>
+		<a href="prev.html">&lt;&lt;</a> &nbsp; 
+		<a href="index.html">Taper #12 :
+		Tools</a> : Spring 2024 &nbsp; 
+		<a href="next.html">&gt;&gt;</a><br>
+		<a href="ambient-clock.html">“ambient clock”</a> by
+		<a href="about.html#Chang">Spencer Chang</a>
+	</h1>
+</header> <!-- All poem code goes here, and must be less than or equal to 2048 bytes (not including closing </body> and </html> tags below)-->
+<div id="c"><div id=T></div><div id=Y></div><div id=N></div><div id=M></div><div id=D></div><span id=H></span><span id=mm></span><span id=ss></span></div>
+<script>function DS(t){return t>=79&&t<172?"Spring":t>=172&&t<266?"Summer":t>=266&&t<355?"Fall":"Winter"}function tick(){let t=new Date,e=t.getHours(),o=t.getMinutes(),n=t.getSeconds(),P=b=>b.toString().padStart(2,"0");A=Math,PI=A.PI,C=A.cos,S=A.sin,z=t.getDate(),s=A.max(90-7.5*A.abs(e-12)+5,15),l=A.floor(n/60*50)+50,r=A.max(A.min(A.abs(100-s),80),30),c.style.setProperty("--b",`hsl(${15*o}, ${l}%, ${s}%)`),c.style.color=`hsl(${(15*o+90)%360}, ${l}%, ${r}%)`,c.style.setProperty("--sc",`hsl(${(15*o+150)%360}, ${l}%, ${r}%)`),T.textContent=t.getTime(),Y.textContent=t.getFullYear(),N.textContent=DS(z),M.textContent=`${P(t.getMonth()+1)}-${t.toLocaleString("default",{month:"short"})}`,D.textContent=`${z}-${t.toLocaleString("default",{weekday:"short"})}`;H.textContent=e%12||12,H.style.setProperty("--sx",`${40*C((e%12*30-90)*PI/180)}px`),H.style.setProperty("--sy",`${40*S((e%12*30-90)*PI/180)}px`);mm.textContent=P(o),mm.style.setProperty("--sx",`${40*C((6*o-90)*PI/180)}px`),mm.style.setProperty("--sy",`${40*S((6*o-90)*PI/180)}px`);ss.textContent=P(n),ss.style.setProperty("--sx",`${40*C((6*n-90)*PI/180)}px`),ss.style.setProperty("--sy",`${40*S((6*n-90)*PI/180)}px`)}setInterval(tick,33),tick();</script>
+<style>#Y,#M{left:4px}#D,#M{position:absolute;bottom:45px}#D,#N{right:4px}#T,#Y,#N{position:absolute;top:0}*{box-sizing:border-box;margin:0}body{height:100vh}#c{padding-bottom:45px;position:relative;height:100%;line-height:1.5;display:flex;transition:background .5s;align-items:center;justify-content:center;flex-direction:column;gap:.5em;font-size:2em;background:var(--b)}#T{word-break:break-all;font-size:1em;--l:2px;filter:blur(var(--l)) hue-rotate(-45deg) contrast(160%);color:var(--b)}#T:hover{--l:0}#H,#mm,#ss{transition:text-shadow var(--s) linear;text-shadow:var(--sx) var(--sy) 6px var(--sc)}#mm{--s:.5s}#H{--s:1s;margin-left:-5em}#ss{--s:.2s;margin-left:5em}</style>
+</body>
+</html>

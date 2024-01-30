@@ -1,3 +1,18 @@
+<!-- 
+Tools are commonly thought of as utilitarian objects, a way to extend our capabilities to accomplish something greater and faster. We use tools, but they also use us. Our relationship is one of exchange: our labor for their capability.
+
+"ambient clock" reimagines one of our most basic and fundamental tools into one that doesn't ask anything of us and invites us to form a new relationship with time.
+
+Even though clocks are traditionally ambient, time has become a capitalist utility in the modern world, used to dictate human movement and labor. Each minute is no different from the last in a world where time is fungible fodder for productivity. Time has become a commodity and a tool of control, something that restricts our autonomy rather than enhancing our capabilities.
+
+"ambient clock" invites us to become acquainted with the natural movements of time and even each minute of the day as its own person. A record of the current time hovers in the center, while their shadows orbit around them, following the trajectory of a clock's hands. The clock's brightness mirrors the movement of the sun throughout the day, and each minute of the day progresses proportionally through the color wheel. 
+
+In addition to the standard discrete units of time modern society follows, "ambient clock" gives space for continuous intervals of time by showing the current season and an ever-increasing number representing the life of computing in milliseconds—a live counter of the current UNIX timestamp. As time passes, this website will also age, until one day its entire surface is filled with a record of the history of its host's origin.
+
+As the name suggests, the piece is designed such that it can be experienced ambiently as a small window in the corner of your screen or set aside on a small side monitor. Rather than yielding something useful immediately upon use, "ambient clock" asks for continued presence. As a visitor spends more time with "ambient clock" and grows familiar with the form of a day's minutes, the more "useful" the clock becomes as a glance becomes enough to give a sense of the time of day.
+
+What does time become when each minute is humanized? How does a tool change us when it becomes an environment?
+-->
 <!-- converted at 01-28-24 -->
 <body>
   <div id="clock">
@@ -105,7 +120,7 @@
       );
     }
 
-    setInterval(updateClock, 100);
+    setInterval(updateClock, 33);
     updateClock();
   </script>
   <style>
@@ -169,6 +184,7 @@
     #clock #minute,
     #clock #second {
       text-shadow: var(--shadow-x) var(--shadow-y) 6px var(--shadow-color);
+      transition: text-shadow 0.5s linear;
     }
     #clock #text {
       display: flex;
@@ -178,9 +194,11 @@
     }
     #clock #hour {
       margin-left: -5em;
+      transition-duration: 1s;
     }
     #clock #second {
       margin-left: 5em;
+      transition-duration: 0.2s;
     }
   </style>
 </body>

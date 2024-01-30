@@ -50,6 +50,7 @@
   .hour,
   .second {
     text-shadow: var(--shadow-x) var(--shadow-y) 6px var(--shadow-color);
+    transition: text-shadow 0.5s linear;
   }
 
   .text {
@@ -60,8 +61,10 @@
   }
   .hour {
     margin-left: -5em;
+    transition-duration: 1s;
   }
   .second {
     margin-left: 5em;
+    transition-duration: 0.2s;
   }
 }
