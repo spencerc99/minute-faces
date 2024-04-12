@@ -5,6 +5,22 @@ body {
   @media screen and ((max-width: 200px) or (max-height: 200px)) {
     font-size: 8px;
   }
+  @media screen and ((max-width: 150px) or (max-height: 150px)) {
+    .clock {
+      .year,
+      .month,
+      .day,
+      .season {
+        display: none;
+      }
+    }
+  }
+  @media screen and ((max-width: 130px) or (max-height: 130px)) {
+    font-size: 6px;
+  }
+  @media screen and ((max-width: 100px) or (max-height: 100px)) {
+    font-size: 4px;
+  }
 }
 
 .clock {
