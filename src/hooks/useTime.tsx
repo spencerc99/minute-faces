@@ -3,18 +3,23 @@
 //
 // useTime hook
 //
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import dayjs from "dayjs";
 
+const ReferenceTime = dayjs("2024-05-06T00:00:00.000Z");
 export const useTime = (refreshCycle = 100) => {
   // Returns the current time
   // and queues re-renders every `refreshCycle` milliseconds (default: 100ms)
-
-  const [now, setNow] = useState(getTime());
+  // const seconds = useRef(0);
+  const [now, setNow] = useState(ReferenceTime);
 
   useEffect(() => {
     // Regularly set time in state
     // (this will cause your component to re-render frequently)
-    const intervalId = setInterval(() => setNow(getTime()), refreshCycle);
+    const intervalId = setInterval(
+      () => setNow((currNow) => currNow.add(1, "minute")),
+      refreshCycle
+    );
 
     // Cleanup interval
     return () => clearInterval(intervalId);
@@ -30,7 +35,6 @@ export const useTime = (refreshCycle = 100) => {
 // (helpful for testing)
 // (and for showing that this hook isn't specific to any datetime library)
 //
-import dayjs from "dayjs";
 
 export const getTime = () => {
   return dayjs();

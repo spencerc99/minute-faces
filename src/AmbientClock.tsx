@@ -182,7 +182,7 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
 }
 
 export function TestClock() {
-  const time = useTime(33);
+  const time = useTime(1);
   const hour = Math.floor((time.second() / 60) * 24) % 24;
 
   return (
