@@ -4,7 +4,9 @@ import { useTime } from "./hooks/useTime";
 // import { useEffect } from "react";
 
 export function AmbientClock() {
-  const time = useTime();
+  const urlParams = new URLSearchParams(window.location.search);
+  const timezone = urlParams.get('tz') || undefined;
+  const time = useTime(100, timezone);
   return <TimeSquare time={time} />;
 }
 
