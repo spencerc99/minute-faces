@@ -31,14 +31,17 @@ body {
 
   @media screen and ((max-width: 100px) or (max-height: 100px)) {
     font-size: 8px;
-    .text {
-      gap: 0;
-    }
-    .hour {
-      margin-left: -3em;
-    }
-    .second {
-      margin-left: 3em;
+
+    .clock {
+      .text {
+        gap: 0;
+      }
+      .hour {
+        margin-left: -3em;
+      }
+      .second {
+        margin-left: 3em;
+      }
     }
   }
 }
