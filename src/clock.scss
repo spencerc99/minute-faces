@@ -3,7 +3,7 @@ body {
     font-size: 12px;
   }
   @media screen and ((max-width: 200px) or (max-height: 200px)) {
-    font-size: 8px;
+    font-size: 10px;
   }
   @media screen and ((max-width: 150px) or (max-height: 150px)) {
     .clock {
@@ -15,11 +15,31 @@ body {
       }
     }
   }
+
   @media screen and ((max-width: 130px) or (max-height: 130px)) {
-    font-size: 6px;
+    font-size: 10px;
+    .text {
+      gap: 0;
+    }
+    .hour {
+      margin-left: -3em;
+    }
+    .second {
+      margin-left: 3em;
+    }
   }
+
   @media screen and ((max-width: 100px) or (max-height: 100px)) {
-    font-size: 4px;
+    font-size: 8px;
+    .text {
+      gap: 0;
+    }
+    .hour {
+      margin-left: -3em;
+    }
+    .second {
+      margin-left: 3em;
+    }
   }
 }
 
