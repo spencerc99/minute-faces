@@ -1,25 +1,77 @@
 import dayjs from "dayjs";
 import "./clock.scss";
 import { useTime } from "./hooks/useTime";
+import dayOfYear from "dayjs/plugin/dayOfYear";
+import isLeapYear from "dayjs/plugin/isLeapYear";
 // import { useEffect } from "react";
+
+dayjs.extend(dayOfYear);
+dayjs.extend(isLeapYear);
 
 export function AmbientClock() {
   const urlParams = new URLSearchParams(window.location.search);
-  const timezone = urlParams.get('tz') || undefined;
+  // Get timezone from URL parameter, or detect from browser
+  const timezone =
+    urlParams.get("tz") || Intl.DateTimeFormat().resolvedOptions().timeZone;
   const time = useTime(100, timezone);
-  return <TimeSquare time={time} />;
+  return <TimeSquare time={time} timezone={timezone} />;
 }
 
-export function daySeason(dayOfYear: number) {
-  if (dayOfYear >= 79 && dayOfYear < 172) {
-    return "Spring";
-  } else if (dayOfYear >= 172 && dayOfYear < 266) {
-    return "Summer";
-  } else if (dayOfYear >= 266 && dayOfYear < 355) {
-    return "Fall";
+/**
+ * Determines the season based on the day of year and hemisphere.
+ * Uses meteorological season dates for consistency:
+ * - Spring: March 1 (day 60) - May 31 (day 151)
+ * - Summer: June 1 (day 152) - August 31 (day 243)
+ * - Fall: September 1 (day 244) - November 30 (day 334)
+ * - Winter: December 1 (day 335) - February 28/29 (day 59)
+ *
+ * For Southern Hemisphere, seasons are inverted (6 months offset).
+ *
+ * @param time - dayjs object representing the current time
+ * @param isNorthernHemisphere - true for Northern Hemisphere, false for Southern
+ */
+export function daySeason(
+  time: dayjs.Dayjs,
+  isNorthernHemisphere: boolean = true
+): string {
+  const dayNum = time.dayOfYear();
+
+  let season: string;
+
+  // Meteorological seasons (Northern Hemisphere)
+  // Spring: March 1 (day 60 in non-leap, 61 in leap) - May 31 (day 151/152)
+  // Summer: June 1 (day 152/153) - August 31 (day 243/244)
+  // Fall: September 1 (day 244/245) - November 30 (day 334/335)
+  // Winter: December 1 (day 335/336) - February 28/29 (day 59/60)
+
+  const isLeapYear = time.isLeapYear();
+  const springStart = isLeapYear ? 61 : 60; // March 1
+  const summerStart = isLeapYear ? 153 : 152; // June 1
+  const fallStart = isLeapYear ? 245 : 244; // September 1
+  const winterStart = isLeapYear ? 336 : 335; // December 1
+
+  if (dayNum >= springStart && dayNum < summerStart) {
+    season = "Spring";
+  } else if (dayNum >= summerStart && dayNum < fallStart) {
+    season = "Summer";
+  } else if (dayNum >= fallStart && dayNum < winterStart) {
+    season = "Fall";
   } else {
-    return "Winter";
+    season = "Winter";
   }
+
+  // Invert seasons for Southern Hemisphere
+  if (!isNorthernHemisphere) {
+    const seasonMap: { [key: string]: string } = {
+      Spring: "Fall",
+      Summer: "Winter",
+      Fall: "Spring",
+      Winter: "Summer",
+    };
+    season = seasonMap[season];
+  }
+
+  return season;
 }
 // const start = dayjs();
 
@@ -63,7 +115,69 @@ export function getCurrentMoonPhase(): { emoji: string; brightness: number } {
   return { emoji, brightness };
 }
 
-function TimeSquare({ time }: { time: dayjs.Dayjs }) {
+/**
+ * Determines if a timezone is in the Northern Hemisphere.
+ * Uses timezone string patterns to detect Southern Hemisphere locations.
+ * Defaults to Northern Hemisphere for unknown/ambiguous timezones.
+ */
+function isNorthernHemisphere(timezone: string): boolean {
+  // Southern Hemisphere timezones (comprehensive list of common ones)
+  const southernTimezones = [
+    // Australia & Oceania
+    "Australia",
+    "Pacific/Auckland", // New Zealand
+    "Pacific/Fiji",
+    "Pacific/Tahiti",
+    "Pacific/Chatham",
+    "Pacific/Tongatapu",
+    "Pacific/Apia",
+    "Pacific/Port_Moresby", // Papua New Guinea
+    "Pacific/Noumea", // New Caledonia
+
+    // Antarctica
+    "Antarctica",
+
+    // Indian Ocean
+    "Indian/Mauritius",
+    "Indian/Reunion",
+    "Indian/Cocos",
+    "Indian/Christmas",
+
+    // Southern Africa
+    "Africa/Johannesburg",
+    "Africa/Maputo",
+    "Africa/Harare",
+    "Africa/Lusaka",
+    "Africa/Windhoek",
+    "Africa/Gaborone",
+    "Africa/Maseru",
+    "Africa/Mbabane",
+
+    // South America
+    "America/Argentina",
+    "America/Santiago",
+    "America/Montevideo",
+    "America/Sao_Paulo",
+    "America/Rio_Branco",
+    "America/Asuncion", // Paraguay
+    "America/La_Paz", // Bolivia (mostly southern hemisphere)
+    "America/Lima", // Peru (mostly southern hemisphere)
+
+    // Atlantic
+    "Atlantic/South_Georgia",
+    "Atlantic/Stanley", // Falkland Islands
+  ];
+
+  return !southernTimezones.some((tz) => timezone.includes(tz));
+}
+
+function TimeSquare({
+  time,
+  timezone,
+}: {
+  time: dayjs.Dayjs;
+  timezone: string;
+}) {
   // lightness scales from 5% at midnight to 100% at noon based on the hour of the day
   const hour = time.hour();
   // const { emoji, brightness } = getCurrentMoonPhase();
@@ -109,7 +223,9 @@ function TimeSquare({ time }: { time: dayjs.Dayjs }) {
       <div className="visits">{BigInt(new Date().getTime()).toString()}</div>
 
       <div className="year">{time.format("YYYY")}</div>
-      <div className="season">{daySeason(time.day())}</div>
+      <div className="season">
+        {daySeason(time, isNorthernHemisphere(timezone))}
+      </div>
       <div className="month">
         {time.format("MM")}-{time.format("MMM")}
       </div>
